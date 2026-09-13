@@ -20,6 +20,7 @@ enum Commands {
         /// Title of the template
         title: String,
     },
+    /// Update the current template of your project
     Update
 }
 
