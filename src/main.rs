@@ -20,6 +20,7 @@ enum Commands {
         /// Title of the template
         title: String,
     },
+    Update
 }
 
 fn main() {
@@ -32,6 +33,9 @@ fn main() {
         Commands::New {title} => {
             println!("List");
         },
+        Commands::Update => {
+            println!("Update");
+        }
 
     }
 }
