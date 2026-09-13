@@ -21,7 +21,12 @@ enum Commands {
         title: String,
     },
     /// Update the current template of your project
-    Update
+    Update,
+    /// Show or set the source folder path for templates
+    Config {
+        /// New path to set. If omitted, displays the current value.
+        path: Option<String>,
+    },
 }
 
 fn main() {
@@ -36,7 +41,15 @@ fn main() {
         },
         Commands::Update => {
             println!("Update");
-        }
+        },
+        Commands::Config { path } => match path {
+            Some(new_path) => {
+                println!("Config set");
+            }
+            None => {
+                println!("Config show");
+            }
+        },
 
     }
 }
