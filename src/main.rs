@@ -3,7 +3,7 @@ use clap::{Parser, Subcommand};
 const DESCRIPTION: &str = "A little tool to help you create new Typst project with a template.";
 
 #[derive(Parser)]
-#[command(name = "croute")]
+#[command(name = "typsta")]
 #[command(version)]
 #[command(about = DESCRIPTION, long_about = None)]
 struct Cli {
