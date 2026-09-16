@@ -12,3 +12,5 @@ A little tool to help you create new Typst project with a template.
 - [x] command `typsta list`
 - [ ] command `typsta new <template_name>`
 - [ ] command `typsta update`
+- [ ] option to choose your favorite text editor (Visual Studio Code or VSCodium)
+- [ ] option to automatically open your text editor on creation (Visual Studio Code or VSCodium)
