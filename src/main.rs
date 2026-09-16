@@ -1,6 +1,13 @@
 use clap::{Parser, Subcommand};
 
+mod app;
+mod utils;
+
+use app::App;
+use utils::file_exists_in_home;
+
 const DESCRIPTION: &str = "A little tool to help you create new Typst project with a template.";
+const CONFIG_FILE_NAME: &str = ".typsta-config.json";
 
 #[derive(Parser)]
 #[command(name = "typsta")]
@@ -32,24 +39,49 @@ enum Commands {
 fn main() {
     let cli = Cli::parse();
 
-    match &cli.command {
+    let mut app: App = if file_exists_in_home(CONFIG_FILE_NAME) {
+        App::load(CONFIG_FILE_NAME)
+    } else {
+        App::new()
+    };
+
+    let template_dir_ok = !app.source_folder.is_empty();
+
+    match cli.command {
         Commands::List => {
-            println!("List");
-        },
-        Commands::New {title} => {
-            println!("List");
-        },
+            if template_dir_ok {
+                // TODO
+            } else {
+                println!("Please configurate your template directory with : typsta config <path>");
+            }
+        }
+        Commands::New { title } => {
+            if template_dir_ok {
+                // TODO
+            } else {
+                println!("Please configurate your template directory with : typsta config <path>");
+            }
+        }
         Commands::Update => {
-            println!("Update");
-        },
+            if template_dir_ok {
+                // TODO
+            } else {
+                println!("Please configurate your template directory with : typsta config <path>");
+            }
+        }
         Commands::Config { path } => match path {
             Some(new_path) => {
-                println!("Config set");
+                app.source_folder = new_path;
+                app.save(CONFIG_FILE_NAME);
+                println!("Source folder set to : {}", app.source_folder);
             }
             None => {
-                println!("Config show");
+                if template_dir_ok {
+                    println!("Current source folder : {}", app.source_folder);
+                } else {
+                    println!("Please configurate your template directory with : typsta config <path>");
+                }
             }
         },
-
     }
 }
