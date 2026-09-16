@@ -1,10 +1,11 @@
 use clap::{Parser, Subcommand};
+use std::fs;
 
 mod app;
 mod utils;
 
 use app::App;
-use utils::file_exists_in_home;
+use utils::{expand_tilde, file_exists_in_home};
 
 const DESCRIPTION: &str = "A little tool to help you create new Typst project with a template.";
 const CONFIG_FILE_NAME: &str = ".typsta-config.json";
@@ -50,7 +51,25 @@ fn main() {
     match cli.command {
         Commands::List => {
             if template_dir_ok {
-                // TODO
+                let source_path = expand_tilde(&app.source_folder);
+
+                let dir_names: Vec<String> = fs::read_dir(&source_path)
+                    .unwrap()
+                    .filter_map(|entry| {
+                        let entry = entry.unwrap();
+                        let path = entry.path();
+                        if path.is_dir() {
+                            path.file_name()
+                                .map(|name| name.to_string_lossy().into_owned())
+                        } else {
+                            None
+                        }
+                    })
+                    .collect();
+
+                for name in &dir_names {
+                    println!("{name}");
+                }
             } else {
                 println!("Please configurate your template directory with : typsta config <path>");
             }
