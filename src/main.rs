@@ -25,8 +25,10 @@ enum Commands {
     List,
     /// Create a new project with a template
     New {
-        /// Title of the template
-        title: String,
+        /// Name of the project
+        project_name: String,
+        /// Name of the template
+        template_name: String,
     },
     /// Update the current template of your project
     Update,
@@ -74,7 +76,7 @@ fn main() {
                 println!("Please configurate your template directory with : typsta config <path>");
             }
         }
-        Commands::New { title } => {
+        Commands::New { project_name, template_name } => {
             if template_dir_ok {
                 // TODO
             } else {
