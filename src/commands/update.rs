@@ -36,15 +36,15 @@ fn get_template_name() -> String {
             .expect("Le fichier est vide")
             .expect("Erreur de lecture de la ligne");
 
-        let template_name = supprimer_premiers_caracteres(&premiere_ligne, 3);
+        let template_name = premiere_ligne
+            .trim_start()
+            .trim_start_matches('/')
+            .trim()
+            .to_string();
 
         template_name
     }
     else {
         "".to_string()
     }
-}
-
-fn supprimer_premiers_caracteres(s: &str, n: usize) -> String {
-    s.chars().skip(n).collect()
 }
