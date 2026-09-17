@@ -29,6 +29,7 @@ pub fn command_new(app: App, template_dir_ok: bool, project_name: String, templa
                         .expect("Fail to launch VSCodium");
 
                 println!("New project \"{}\" created successfully with the template \"{}\" !", project_name, template_name);
+                println!("Execute `cd {}` to access your project in the terminal",project_name);
 
             } else {
                 println!("This directory name already exists");
