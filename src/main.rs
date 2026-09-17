@@ -1,4 +1,6 @@
 use clap::{Parser, Subcommand};
+use std::path::PathBuf;
+use std::fs;
 
 mod app;
 mod utils;
@@ -53,10 +55,9 @@ fn main() {
         Commands::List => {
             if template_dir_ok {
                 let source_path = expand_tilde(&app.source_folder);
+                let templates_name: Vec<String> = templates_names(source_path);
 
-                let dir_names: Vec<String> = templates_names(source_path);
-
-                for name in &dir_names {
+                for name in &templates_name {
                     println!("{name}");
                 }
             } else {
@@ -65,7 +66,31 @@ fn main() {
         }
         Commands::New { project_name, template_name } => {
             if template_dir_ok {
-                // TODO
+                let source_path = expand_tilde(&app.source_folder);
+                let templates_name: Vec<String> = templates_names(source_path.clone());
+
+                if templates_name.contains(&template_name) {
+                    let dir_names: Vec<String> = templates_names(PathBuf::from("."));
+
+                    if !dir_names.contains(&project_name) {
+                        let _ = fs::create_dir(&project_name);
+
+                        let files_name = ["main.typ","template.typ"];
+                        for file in files_name {
+                            let source = source_path.join(&template_name).join(file);
+                            let destination = PathBuf::from(&project_name).join(file);
+
+                            let _ = fs::copy(&source, &destination);
+                        }
+
+                        println!("New project \"{}\" created successfully with the template \"{}\" !", project_name, template_name);
+
+                    } else {
+                        println!("This directory name already exist");
+                    }
+                } else {
+                    println!("This template doesn't exist");
+                }
             } else {
                 println!("Please configurate your template directory with : typsta config <path>");
             }
