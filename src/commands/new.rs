@@ -26,12 +26,12 @@ pub fn command_new(app: App, template_dir_ok: bool, project_name: String, templa
                 println!("New project \"{}\" created successfully with the template \"{}\" !", project_name, template_name);
 
             } else {
-                println!("This directory name already exist");
+                println!("This directory name already exists");
             }
         } else {
             println!("This template doesn't exist");
         }
     } else {
-        println!("Please configurate your template directory with : typsta config <path>");
+        println!("Please configure your template directory with : typsta config <path>");
     }
 }

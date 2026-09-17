@@ -10,6 +10,6 @@ pub fn command_list(app: App,template_dir_ok: bool) {
             println!("{name}");
         }
     } else {
-        println!("Please configurate your template directory with : typsta config <path>");
+        println!("Please configure your template directory with : typsta config <path>");
     }
 }

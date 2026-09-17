@@ -25,7 +25,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// List all the template avalaible
+    /// List all the template available
     List,
     /// Create a new project with a template
     New {

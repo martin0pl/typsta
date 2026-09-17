@@ -11,7 +11,7 @@ pub fn command_config(mut app: App, path: Option<String>, config_file_name:  &st
             if template_dir_ok {
                 println!("Current source folder : {}", app.source_folder);
             } else {
-                println!("Please configurate your template directory with : typsta config <path>");
+                println!("Please configure your template directory with : typsta config <path>");
             }
         }
     }

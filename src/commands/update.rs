@@ -9,7 +9,7 @@ pub fn command_update(template_dir_ok: bool, source_folder: String) {
         let template_name = get_template_name();
 
         if template_name.is_empty() {
-            println!("Your project doesn't contains a template file");
+            println!("Your project doesn't contain a template file");
         }
         else {
             let source_path = expand_tilde(&source_folder);
@@ -21,7 +21,7 @@ pub fn command_update(template_dir_ok: bool, source_folder: String) {
         }
 
     } else {
-        println!("Please configurate your template directory with : typsta config <path>");
+        println!("Please configure your template directory with : typsta config <path>");
     }
 }
 
@@ -33,8 +33,8 @@ fn get_template_name() -> String {
         let premiere_ligne = reader
             .lines()
             .next()
-            .expect("Le fichier est vide")
-            .expect("Erreur de lecture de la ligne");
+            .expect("The template file is empty")
+            .expect("Error during reading");
 
         let template_name = premiere_ligne
             .trim_start()
