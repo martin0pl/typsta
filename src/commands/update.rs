@@ -36,13 +36,12 @@ fn get_template_name() -> String {
             .expect("The template file is empty")
             .expect("Error during reading");
 
-        let template_name = premiere_ligne
+        premiere_ligne
             .trim_start()
             .trim_start_matches('/')
             .trim()
-            .to_string();
+            .to_string()
 
-        template_name
     }
     else {
         "".to_string()
