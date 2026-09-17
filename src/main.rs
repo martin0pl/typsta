@@ -1,12 +1,15 @@
 use clap::{Parser, Subcommand};
-use std::path::PathBuf;
-use std::fs;
 
 mod app;
 mod utils;
+mod commands;
 
 use app::App;
-use utils::{expand_tilde, file_exists_in_home, templates_names};
+use utils::file_exists_in_home;
+use commands::new::command_new;
+use commands::list::command_list;
+use commands::config::command_config;
+use commands::update::command_update;
 
 const DESCRIPTION: &str = "A little tool to help you create new Typst project with a template.";
 const CONFIG_FILE_NAME: &str = ".typsta-config.json";
@@ -43,7 +46,7 @@ enum Commands {
 fn main() {
     let cli = Cli::parse();
 
-    let mut app: App = if file_exists_in_home(CONFIG_FILE_NAME) {
+    let app: App = if file_exists_in_home(CONFIG_FILE_NAME) {
         App::load(CONFIG_FILE_NAME)
     } else {
         App::new()
@@ -53,68 +56,16 @@ fn main() {
 
     match cli.command {
         Commands::List => {
-            if template_dir_ok {
-                let source_path = expand_tilde(&app.source_folder);
-                let templates_name: Vec<String> = templates_names(source_path);
-
-                for name in &templates_name {
-                    println!("{name}");
-                }
-            } else {
-                println!("Please configurate your template directory with : typsta config <path>");
-            }
+            command_list(app, template_dir_ok);
         }
         Commands::New { project_name, template_name } => {
-            if template_dir_ok {
-                let source_path = expand_tilde(&app.source_folder);
-                let templates_name: Vec<String> = templates_names(source_path.clone());
-
-                if templates_name.contains(&template_name) {
-                    let dir_names: Vec<String> = templates_names(PathBuf::from("."));
-
-                    if !dir_names.contains(&project_name) {
-                        let _ = fs::create_dir(&project_name);
-
-                        let files_name = ["main.typ","template.typ"];
-                        for file in files_name {
-                            let source = source_path.join(&template_name).join(file);
-                            let destination = PathBuf::from(&project_name).join(file);
-
-                            let _ = fs::copy(&source, &destination);
-                        }
-
-                        println!("New project \"{}\" created successfully with the template \"{}\" !", project_name, template_name);
-
-                    } else {
-                        println!("This directory name already exist");
-                    }
-                } else {
-                    println!("This template doesn't exist");
-                }
-            } else {
-                println!("Please configurate your template directory with : typsta config <path>");
-            }
+            command_new(app,template_dir_ok,project_name,template_name);
         }
         Commands::Update => {
-            if template_dir_ok {
-                // TODO
-            } else {
-                println!("Please configurate your template directory with : typsta config <path>");
-            }
+            command_update(template_dir_ok);
         }
-        Commands::Config { path } => match path {
-            Some(new_path) => {
-                app.source_folder = new_path;
-                app.save(CONFIG_FILE_NAME);
-                println!("Source folder set to : {}", app.source_folder);
-            }
-            None => {
-                if template_dir_ok {
-                    println!("Current source folder : {}", app.source_folder);
-                } else {
-                    println!("Please configurate your template directory with : typsta config <path>");
-                }
-            }
+        Commands::Config { path } => {
+            command_config(app, path, CONFIG_FILE_NAME, template_dir_ok);
         },
     }
 }
