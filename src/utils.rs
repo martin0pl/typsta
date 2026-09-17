@@ -1,13 +1,29 @@
 use std::path::PathBuf;
 use std::fs;
 
-pub fn templates_names(source_path: PathBuf) -> Vec<String> {
+pub fn dir_names(source_path: PathBuf) -> Vec<String> {
     fs::read_dir(&source_path)
         .unwrap()
         .filter_map(|entry| {
             let entry = entry.unwrap();
             let path = entry.path();
             if path.is_dir() {
+                path.file_name()
+                    .map(|name| name.to_string_lossy().into_owned())
+            } else {
+                None
+            }
+        })
+        .collect()
+}
+
+pub fn file_names(source_path: PathBuf) -> Vec<String> {
+    fs::read_dir(&source_path)
+        .unwrap()
+        .filter_map(|entry| {
+            let entry = entry.unwrap();
+            let path = entry.path();
+            if path.is_file() {
                 path.file_name()
                     .map(|name| name.to_string_lossy().into_owned())
             } else {

@@ -62,7 +62,7 @@ fn main() {
             command_new(app,template_dir_ok,project_name,template_name);
         }
         Commands::Update => {
-            command_update(template_dir_ok);
+            command_update(template_dir_ok, app.source_folder);
         }
         Commands::Config { path } => {
             command_config(app, path, CONFIG_FILE_NAME, template_dir_ok);

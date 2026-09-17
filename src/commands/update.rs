@@ -1,7 +1,50 @@
-pub fn command_update(template_dir_ok: bool) {
+use std::path::PathBuf;
+use std::fs::{File,copy};
+use std::io::{BufRead, BufReader};
+
+use crate::utils::{file_names,expand_tilde};
+
+pub fn command_update(template_dir_ok: bool, source_folder: String) {
     if template_dir_ok {
-        // TODO
+        let template_name = get_template_name();
+
+        if template_name.is_empty() {
+            println!("Your project doesn't contains a template file");
+        }
+        else {
+            let source_path = expand_tilde(&source_folder);
+
+            let source = source_path.join(&template_name).join("template.typ");
+            let destination = PathBuf::from(".").join("template.typ");
+
+            let _ = copy(&source, &destination);
+        }
+
     } else {
         println!("Please configurate your template directory with : typsta config <path>");
     }
+}
+
+fn get_template_name() -> String {
+    if file_names(PathBuf::from(".")).contains(&"template.typ".to_string()) {
+        let file = File::open("template.typ").expect("Impossible d'ouvrir le fichier");
+        let reader = BufReader::new(file);
+
+        let premiere_ligne = reader
+            .lines()
+            .next()
+            .expect("Le fichier est vide")
+            .expect("Erreur de lecture de la ligne");
+
+        let template_name = supprimer_premiers_caracteres(&premiere_ligne, 3);
+
+        template_name
+    }
+    else {
+        "".to_string()
+    }
+}
+
+fn supprimer_premiers_caracteres(s: &str, n: usize) -> String {
+    s.chars().skip(n).collect()
 }
