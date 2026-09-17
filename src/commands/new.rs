@@ -22,12 +22,11 @@ pub fn command_new(app: App, template_dir_ok: bool, project_name: String, templa
                     let destination = PathBuf::from(&project_name).join(file);
 
                     let _ = fs::copy(&source, &destination);
-
-                    Command::new("codium")
-                            .arg(format!("./{}/",project_name))
-                            .status()
-                            .expect("Fail to launch VSCodium");
                 }
+                Command::new("codium")
+                        .arg(format!("./{}/",project_name))
+                        .status()
+                        .expect("Fail to launch VSCodium");
 
                 println!("New project \"{}\" created successfully with the template \"{}\" !", project_name, template_name);
 
